@@ -1,0 +1,287 @@
+@font-face{
+  font-family: 'Rubik';
+  src: url('../fonts/VarelaRound-Regular.ttf');
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  margin: auto;
+  max-width: 100%;
+  min-width: 700px;
+  min-height: 550px;
+  height: 100vh;
+}
+
+#wrapper{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #141518;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#titlebar{
+  background-color: #1f2125;
+  box-shadow: 0px 1px #141518;
+  height: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  z-index: 1000;
+}
+
+#titleBarDraggable{
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+  width: 100%;
+}
+
+.titleBarBtn{
+  font-family: inherit;
+  width: 30px;
+  color: #ddd5cd;
+  line-height: 15px;
+  text-align: center;
+  z-index: 1;
+  cursor: pointer;
+  -webkit-user-select: none;
+  transition: background-color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.titleBarBtn:hover{
+  background-color: #24282c;
+}
+
+.titleBarBtn:active{
+  background-color: #141518;
+}
+
+#exitTitleBarBtn:hover{
+  background-color: rgb(223, 51, 51);
+}
+#exitTitleBarBtn:active{
+  background-color: rgb(177, 32, 32);
+}
+
+#minimizeTitleBarBtn{
+  line-height: 5px;
+}
+
+#exitTitleBarBtn{
+  line-height: 17px;
+}
+
+.panels{
+  width: 100%;
+  background-color: #141518;
+  height: 100%;
+  display: flex;
+  flex-grow: 0;
+  color: #ECEEEC;
+  overflow: hidden;
+}
+
+#nav-block{
+  position: relative;
+  background-color: #24282c;
+  min-width: 250px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  z-index: 1;
+}
+ 
+.mainHeader{
+  width: 100%;
+  height: 50px;
+  padding: 10px 0px;
+  position: relative;
+  display: flex;
+  background-color: #24282c;
+  z-index: 1;
+}
+
+.bigLabel{
+  font-size: 30px;
+  font-weight: bold;
+  height: 50px;
+  line-height: 50px;
+  margin-left: 20px;
+  width: 70%;
+  overflow: hidden;
+  -webkit-user-select: none;
+}
+
+.labelDescription{
+  font-size: 15px;
+  height: 50px;
+  width: auto;
+}
+
+.border{
+  height: 100%;
+  border: 1px solid #141518;
+  border-radius: 5px;
+  margin: 5px;
+  background-color: #2b2f35;
+  overflow: hidden;
+}
+
+.scrollWrapper{
+  height: 100%;
+  overflow: auto;
+}
+
+#toDoCollectionList{
+  height: 100%;
+  background-color: #2b2f35;
+}
+
+.toDoCollectionItem{
+  padding: 10px;
+  border-radius: 2px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.toDoCollectionItem:hover{
+  background-color:  #30353b;
+}
+
+.toDoCollectionItem:active{
+  background-color: #1f2125;
+}
+
+#toDoAddPopupBtn{
+  position: relative;
+  right: 0px;
+  font-size: 15px;
+  width: 30px;
+  height: 30px;
+  margin: 12.5px;
+  cursor: pointer;
+}
+
+
+#right-block{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #24282c;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.rightContentPanel{
+  border: 1px solid #141518;
+  border-radius: 5px;
+  height: 100%;
+  margin: 5px;
+  overflow: hidden;
+}
+
+#mainTimeContent{
+  background-color: #2b2f35;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.timeContainerBlock{
+  width: 100px;
+}
+
+.timeBlock {
+  position: relative;
+  flex: 1;
+  min-height: 50px;
+  background-color: #2b2f35;
+  transition: background-color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+  margin: 10px 5px ;
+  border: 1px solid #141518;
+  border-radius: 5px;
+  z-index: 2;
+}
+
+.timeBlock:hover{
+  background-color: #30353b;
+}
+
+.timeBlock:active{
+  background-color: #1f2125;
+}
+
+.timeLabelWrapper{
+  height: 100%;
+  min-height: 50px;
+  width: 100%;
+  display: table;
+}
+
+.timeLabel{
+  display: table-cell;
+  vertical-align: middle;
+  width: 100px;
+  text-align: center;
+}
+
+.timeBlockContent{
+  position: relative;
+  width: 100%;
+}
+
+.taskContainerBlock{
+  flex: 1;
+  margin: 5px;
+  position: relative;
+}
+
+.taskBlockWrapper{
+  position: relative;
+  background-color: #40494e;
+  border-radius: 5px;
+  border: 1px solid #141518;
+  min-height: 50px;
+  flex: 1;
+  transition: background-color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.taskBlockWrapper:hover{
+  background-color: #49555a;
+}
+
+.taskBlock{
+  display: flex;
+  flex-direction: row;
+  min-height: 50px;
+}
+
+.taskBlockTimeSpan{
+  position: relative;
+  left: 10px;
+  margin: 10px;
+  width: 100px;
+  font-weight: bold;
+}
+
+.taskBlockContent{
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.taskBlockName{
+  font-weight: bold;
+}
+
+.taskText{
+  margin: 5px;;
+}

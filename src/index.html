@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+
+  <link rel="stylesheet" href="./css/cssreset.css">
+  <link rel="stylesheet" href="./css/index.css">
+  <link rel="stylesheet" href="./css/popup.css">
+  <link rel="stylesheet" href="https://unpkg.com/simplebar@latest/dist/simplebar.css" />
+
+  <script defer type="module" src="TitleBarControls.js"></script>
+  <script defer type="module" src="./components/MenuControl.js"></script>
+  <script defer type="module" src="./components/CollectionDisplayer.js"></script>
+  <script defer type="module" src="ToDoCollectionManager.js"></script>
+  <script defer src="./components/TaskControls.js"></script>
+  <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
+</head>
+
+<body>
+  <div id="wrapper">
+    <div id="titlebar">
+      <span id="titleBarDraggable"></span>
+      <span id="minimizeTitleBarBtn" class="titleBarBtn">&#95;</span>
+      <span id="maximizeTitleBarBtn" class="titleBarBtn">&square;</span>
+      <span id="exitTitleBarBtn" class="titleBarBtn">&times;</span>
+    </div>
+    <div class="panels">
+      <nav id="nav-block" class="navigation">
+        <div class="mainHeader">
+          <span class="bigLabel">Collections</span>
+          <button id="toDoAddPopupBtn" class="formBtn">
+            +
+          </button>
+        </div>
+        <div class="border">
+          <div class="scrollWrapper" data-simplebar>
+            <div id="toDoCollectionList">
+              <div class="toDoCollectionItem">
+                <span>Temp Name</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="right-block">
+        <div class="mainHeader">
+          <span id="d-collectionName" class="bigLabel">Collection Name</span>
+          <span id="d-collectionDesc" class="labelDescription">collection description</span>
+        </div>
+        <div class="rightContentPanel">
+          <div class="scrollWrapper" data-simplebar>
+            <div id="mainTimeContent">
+              <div id="timeContainer" class="timeContainerBlock">
+                <div class="timeBlock">
+                  <div class="timeLabelWrapper">
+                    <div class="timeLabel">
+                      9:00 AM
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="taskContainer" class="taskContainerBlock" >
+                  <div id="t1" class="taskBlockWrapper" >
+                    <div class="taskBlock draggable">
+                      <span class="taskBlockTimeSpan">9:15 AM</span>
+                      <div class="taskBlockContent">
+                        <span class="taskBlockName taskText">Task name</span>
+                        <span class="taskBlockDescription taskText">Task description</span>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="popup">
+      <div id="popupCloseArea"></div>
+      <div class="formWrapper">
+        <div id="newListForm">
+          <span class="popupHeader">Create a new list of to dos</span>
+          <span class="inputLabel">
+            List name?
+            <span class="inputWarning">* list must have a name!</span>
+          </span>
+          <input id="listNameInputBox" class="formInputBox">
+          <span class="inputLabel">
+            What is it about?
+            <span class="inputWarning">* list must have a description!</span>
+          </span>
+          <input id="listDescriptionInputBox" class="formInputBox">
+          <button id="createCollectionBtn" class="formBtn">
+            Create!
+          </button>
+        </div>
+        <div id="newTaskForm">
+          <span class="popupHeader">Create a new task</span>
+          <span class="inputLabel">
+            Task name?
+            <span class="inputWarning">* task must have a name!</span>
+          </span>
+          <input id="taskNameInputBox" class="formInputBox">
+          <span class="inputLabel">
+            What is it about?
+          </span>
+          <input id="taskDescriptionInputBox" class="formInputBox">
+          <button id="createTaskBtn" class="formBtn">
+            Create!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

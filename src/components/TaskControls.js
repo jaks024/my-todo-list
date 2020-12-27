@@ -14,10 +14,6 @@ function udpateDrag(e){
 var dragging = false;
 
 function startDrag(e){
-    if(!e.target.classList.contains("draggable")){
-        return;
-    }
-    
     dragging = true;
 
     var dragRect = t1.getBoundingClientRect();
@@ -35,10 +31,17 @@ function onDrag(e) {
     }
     var canvasRect = taskContainer.getBoundingClientRect();
 
-    var x = e.clientX - clickX - canvasRect.left;
-    var y = e.clientY - clickY - canvasRect.top;
-    t1.style.left = x + 'px';
-    t1.style.top = y  + 'px';
+    var x = Math.ceil((e.clientX - clickX - canvasRect.left) / 5) * 5;
+    var y = Math.ceil((e.clientY - clickY - canvasRect.top) / 5) * 5;
+    
+    if(x >= 0 && x + (t1.offsetWidth) <= taskContainer.offsetWidth){
+        t1.style.left = x + 'px';
+    } 
+    //to add: when cursor is outside of rect, stop drag
+
+    if(y >= 0 && y + (t1.offsetHeight) <= taskContainer.offsetHeight){
+        t1.style.top = y  + 'px';
+    } 
     t1.style.userSelect = "none";
     //console.log(`x:${pos.x}, y:${pos.x}`);
 }

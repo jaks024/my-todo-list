@@ -6,16 +6,34 @@ const collectionNameField = document.getElementById("d-collectionName");
 const collectionDescField = document.getElementById("d-collectionDesc");
 
 
+var currentCollection = null;
+
+// resizing time blcoks variables
+var resizingElement = null;
+var mouseDownPosition = 0;
+var originalHeight = 0;
+var cursorUp = true;
+
+// resizing delay for lower cpu usage
+var prevTime;
+
+// time block heights
+var timeBlockProperties;
+var timeBlockIdToIntKeyMap;
+
+// event for updating task time labels
+//export const onTimeBlockChange = new Event('onTimeBlockChange', {bubbles: true});
+
 //initialize all html elements
 initDisplayer();
 
 function initDisplayer(){
     console.log("player initiated");
     GenerateTimeBlocks();
+    //console.log(" back " + getTimeBlockBasedOnPos(65));
+    //console.log("get " + getTimeBlockBasedOnPos(30));
 }
 
-
-var currentCollection = null;
 
 export function DisplayCollection(collection){
 
@@ -30,10 +48,32 @@ export function DisplayCollection(collection){
     console.log(`displaying ${collection.name}`);
 }
 
+export function getTimeBlockBasedOnPos(y){
+    let total = 0;
+    for(const [id, height] of timeBlockProperties.entries()){
+        if(y >= total  && y <= total + height){
+            return [id, height];
+        }
+        total += height;
+    }
+    return null;
+}
+
+// from and to are integers 
+export function getTimeBlockRegionHeight(from, to){
+    let total = 0;
+    for(const [id, height] of timeBlockProperties.entries()){
+        if(id >= from && id <= to){
+            total += height;
+        }
+    }
+    return total;
+}
+
 
 function GenerateTimeBlocks(timeType){
-    
-    var timeBlockIds = [];
+    timeBlockProperties = new Map();
+    timeBlockIdToIntKeyMap = new Map();
     const mainDiv = document.getElementById("timeContainer");
     for(var i = 0; i < 24; i++){
         let blockId = `${i}-timeBlock`;
@@ -64,47 +104,41 @@ function GenerateTimeBlocks(timeType){
         mainDiv.appendChild(timeBlock);
         
         timeBlock.id = blockId;
-        timeBlockIds.push(blockId);
+        timeBlockProperties.set(i, 50);
+        timeBlockIdToIntKeyMap.set(blockId, i);
     }
 }
 
 
-var resizingElement = null;
-var mouseDownPosition = 0;
-var moveIntervId;
-var originalHeight = 0;
-var cursorUp = true;
-function mousePos(e){
-    var x = e.clientX;
-    var y = e.clientY;
-    console.log(`name: ${e.target.classList}`);
-    ResizeTimeBlockMove(y);
+function ResizeMoveDelayer(e){
+    var time = new Date().getTime();
+    if(time - prevTime < 100){
+        return;
+    }
+    prevTime = time;
 
+    ResizeTimeBlockMove(e.clientY);
     if(!e.target.classList.contains("timeResizeHandle") && cursorUp){
        ResizeTimeBlockEnd();
     }
-}
 
-document.addEventListener("mousemove", mousePos);
-document.addEventListener("mouseup", ResizeTimeBlockEnd)
+}
 
 function ResizeTimeBlockStart(e, id){
     resizingElement = document.getElementById(id);
     originalHeight = resizingElement.offsetHeight;
     mouseDownPosition = e.clientY;
     cursorUp = false;
-    console.log("set");
-   // moveIntervId = setInterval(ResizeTimeBlockMove, 10);
+    document.addEventListener("mousemove", ResizeMoveDelayer);
+    document.addEventListener("mouseup", ResizeTimeBlockEnd)
+    document.body.style.cursor = "s-resize";
 }
 
 function ResizeTimeBlockMove(y){
     if(!resizingElement){
-        console.log('not changing');
         return;
     }
-    console.log('changing ' + resizingElement.id);
-    resizingElement.style.height = (y - mouseDownPosition) + originalHeight + "px"; 
-    console.log(`init: ${mouseDownPosition}, curr: ${y}, diff: ${y - mouseDownPosition} relt: ${y - mouseDownPosition + originalHeight}`);
+    resizingElement.style.height = Math.ceil(((y - mouseDownPosition) + originalHeight) / 25) * 25 + "px"; 
 }
 
 function ResizeTimeBlockEnd(){
@@ -112,10 +146,13 @@ function ResizeTimeBlockEnd(){
         return;
     }
 
-    clearInterval(moveIntervId);
+    timeBlockProperties.set(timeBlockIdToIntKeyMap.get(resizingElement.id), resizingElement.offsetHeight);
+    console.log(timeBlockProperties);   
     cursorUp = true;
     resizingElement = null;
-    console.log("cleared");
+    document.removeEventListener("mousemove", ResizeMoveDelayer);
+    document.removeEventListener("mouseup", ResizeTimeBlockEnd)
+    document.body.style.cursor = "auto";
 }
 
 function MakeTaskBlock(){

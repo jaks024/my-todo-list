@@ -14,7 +14,7 @@
   <script defer type="module" src="./components/MenuControl.js"></script>
   <script defer type="module" src="./components/CollectionDisplayer.js"></script>
   <script defer type="module" src="ToDoCollectionManager.js"></script>
-  <script defer src="./components/TaskControls.js"></script>
+  <script defer type="module" src="./components/TaskControls.js"></script>
   <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
 </head>
 
@@ -52,25 +52,29 @@
         <div class="rightContentPanel">
           <div class="scrollWrapper" data-simplebar>
             <div id="mainTimeContent">
-              <div id="timeContainer" class="timeContainerBlock">
-                <div class="timeBlock">
+            <div id="timeContainer" class="timeContainerBlock">
+                <!-- div class="timeBlock">
                   <div class="timeLabelWrapper">
                     <div class="timeLabel">
                       9:00 AM
                     </div>
                   </div>
                   <div class="timeResizeHandle"></div>
-                </div>
+                </div -->
               </div>
               <div id="taskContainer" class="taskContainerBlock" >
                   <div id="t1" class="taskBlockWrapper" >
                     <div class="taskBlock draggable">
-                      <span class="taskBlockTimeSpan">9:15 AM</span>
-                      <div class="taskBlockContent">
+                      <div class="taskBlockTitleBar">
+                        <span class="taskBlockTimeStart">9:15 AM</span>
+                        <span class="taskBlockTimeEnd">9:15 AM</span>
                         <span class="taskBlockName taskText">Task name</span>
-                        <span class="taskBlockDescription taskText">Task description</span>
                       </div>
+                      <span class="taskBlockDescription taskText">Task description</span>
                     </div>
+                    <div class="taskBlockDragRight"></div>
+                    <div class="taskBlockDragBot"></div>
+                    <div class="taskBlockDragBotRight"></div>
                 </div>
               </div>
             </div>

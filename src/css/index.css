@@ -192,6 +192,7 @@ body {
   width: 100%;
   display: flex;
   flex-direction: row;
+  min-height: 1202px;
 }
 
 .timeContainerBlock{
@@ -206,6 +207,7 @@ body {
   z-index: 2;
   display: flex;
   flex-direction: column;
+  height: 50px;
 }
 
 .timeResizeHandle{
@@ -249,7 +251,7 @@ body {
 
 .taskContainerBlock{
   flex: 1;
-  margin: 5px;
+  margin-right: 15px;
   position: relative;
 }
 
@@ -258,9 +260,10 @@ body {
   background-color: #40494e;
   border-radius: 5px;
   border: 1px solid #141518;
-  min-height: 50px;
+  min-height: 48px;
   flex: 1;
   width: 300px;
+  min-width: 300px;
   transition: background-color 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -273,29 +276,71 @@ body {
 }
 .taskBlock{
   display: flex;
-  flex-direction: row;
-  min-height: 50px;
-  user-select: none;
-}
-
-.taskBlockTimeSpan{
-  position: relative;
-  left: 10px;
-  margin: 10px;
-  width: 100px;
-  font-weight: bold;
-}
-
-.taskBlockContent{
-  margin: 5px;
-  display: flex;
   flex-direction: column;
+  min-height: 48px;
+  user-select: none;
+  height: 100%;
+  z-index: 1;
+}
+
+.taskBlockTimeStart, .taskBlockTimeEnd{
+  position: relative;
+  margin: 5px 0px;
+  left: 5px;
+  width: 65px;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.taskBlockTimeStart{
+  width: 54px;
+}
+
+.taskBlockTitleBar{
+  display: flex;
+  flex-direction: row;
+  pointer-events: none;
 }
 
 .taskBlockName{
   font-weight: bold;
+  margin: 3px 5px;
+  font-size: 15px;
+}
+
+.taskBlockDescription{
+  margin: 0px 5px 5px 5px;
+  font-size: 12px;
 }
 
 .taskText{
-  margin: 5px;;
+  pointer-events: none;
+  overflow: hidden;
+  flex: 1;
+}
+
+.taskBlockDragBot{
+  position: absolute;
+  bottom: 0px;
+  cursor: s-resize;
+  height: 5px;
+  width: 100%;
+}
+
+.taskBlockDragRight{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  cursor: e-resize;
+  width: 5px;
+  height: 100%;
+}
+
+.taskBlockDragBotRight{
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 10px;
+  height: 10px;
+  cursor: se-resize;
 }

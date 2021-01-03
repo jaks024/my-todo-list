@@ -1,8 +1,13 @@
 
 const popup = document.getElementById('popup');
 const newListForm = document.getElementById('newListForm');
+
+// task form
 const newTaskForm = document.getElementById('newTaskForm');
 
+
+
+// form generals 
 const popupCloseArea = document.getElementById('popupCloseArea');
 popupCloseArea.onclick = ClosePopup;
 

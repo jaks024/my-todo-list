@@ -2,7 +2,8 @@ import { getTimeBlockBasedOnPos,
             getTimeBlockRegionHeight } from "./CollectionDisplayer.js";
 
 
-const t1 = document.getElementById("t1");
+var currentTaskBlock;
+var currentTaskData; 
 const taskContainer = document.getElementById("taskContainer");
 
 
@@ -15,6 +16,7 @@ var timeLabelEnd;
 var isChangingSize = false;
 
 // drag to change div size
+var minHeight = 20;
 var initialHeight = 0;
 var initialWidth = 0;
 var initialClickY = 0;
@@ -22,8 +24,14 @@ var initialClickX = 0;
 var resizeW = false;
 var resizeH = false;
 
-//replace t1 with the general one
-t1.addEventListener("mousedown", startDrag, false);
+
+export function setCurrentTask(id, task, e){
+    currentTaskBlock = document.getElementById(id);
+    currentTaskData = task;
+    //currentTaskBlock.addEventListener("mousedown", startDrag, false);
+    startDrag(e);
+}
+
 
 function MouseUpMoveEvents(up, move, isAdd){
     if(up){
@@ -45,11 +53,11 @@ function MouseUpMoveEvents(up, move, isAdd){
 
 
 function startDrag(e) {
-    timeLabelStart = t1.querySelector(".taskBlockTimeStart");
-    timeLabelEnd = t1.querySelector(".taskBlockTimeEnd");
+    timeLabelStart = currentTaskBlock.querySelector(".taskBlockTimeStart");
+    timeLabelEnd = currentTaskBlock.querySelector(".taskBlockTimeEnd");
 
     if (e.target.classList.contains("draggable") && !isChangingSize) {
-        var dragRect = t1.getBoundingClientRect();
+        var dragRect = currentTaskBlock.getBoundingClientRect();
         movementInitClickX = e.clientX - dragRect.left;
         movementInitClickY = e.clientY - dragRect.top;
 
@@ -67,26 +75,29 @@ function onMovementDrag(e) {
     var x = Math.ceil((e.clientX - movementInitClickX - canvasRect.left));
     var y = Math.ceil((e.clientY - movementInitClickY - canvasRect.top));
 
-    if (x >= 0 && x + (t1.offsetWidth) <= taskContainer.offsetWidth) {
-        t1.style.left = x / taskContainer.offsetWidth * 100 + '%';
+    if (x >= 0 && x + currentTaskBlock.offsetWidth <= taskContainer.offsetWidth) {
+        let percentToLeft = x / taskContainer.offsetWidth * 100
+        currentTaskBlock.style.left = percentToLeft + '%';
+        currentTaskBlock.style.zIndex = Math.round(percentToLeft);
+        currentTaskData.zIndex = percentToLeft;
     }
-    if (y >= 0 && y + (t1.offsetHeight) <= taskContainer.offsetHeight - 2) {
-        t1.style.top = y + 'px';
-        updateTimeLabel(y, y + t1.offsetHeight);
+    if (y >= 0 && y + currentTaskBlock.offsetHeight <= taskContainer.offsetHeight - 2) {
+        currentTaskBlock.style.top = y + 'px';
+        updateTimeLabel(y, y + currentTaskBlock.offsetHeight);
     }
 }
 
 function stopMovementDrag() {
-    t1.style.userSelect = "auto";
+    currentTaskBlock.style.userSelect = "auto";
     MouseUpMoveEvents(stopMovementDrag, onMovementDrag, false);
     taskContainer.removeEventListener("mousemove", onMovementDrag);
 }
 
 
 function startResizeDrag(e){
-    initialHeight = t1.offsetHeight;
+    initialHeight = currentTaskBlock.offsetHeight;
     initialClickY = e.clientY;
-    initialWidth = t1.offsetWidth;
+    initialWidth = currentTaskBlock.offsetWidth;
     initialClickX = e.clientX;
     isChangingSize = true;
 
@@ -109,12 +120,13 @@ function onResizeDrag(e){
     let height = e.clientY - initialClickY + initialHeight;
     let width = e.clientX - initialClickX + initialWidth;
 
-    if(width <= taskContainer.offsetWidth - t1.offsetLeft && resizeW){
-        t1.style.width = width / taskContainer.offsetWidth * 100 + "%";
+    if(width <= taskContainer.offsetWidth - currentTaskBlock.offsetLeft && resizeW){
+        currentTaskBlock.style.width = width / taskContainer.offsetWidth * 100 + "%";
     }
-    if(height <= taskContainer.offsetHeight - t1.offsetTop - 4 && resizeH){
-        t1.style.height = height + "px";
-        updateTimeLabel(-1,  t1.offsetHeight + t1.offsetTop);
+    if(height <= taskContainer.offsetHeight - currentTaskBlock.offsetTop - 4 && resizeH
+        && height >= minHeight){
+        currentTaskBlock.style.height = height + "px";
+        updateTimeLabel(-1,  currentTaskBlock.offsetHeight + currentTaskBlock.offsetTop);
     }
 }
 
@@ -128,16 +140,18 @@ function stopResizeDrag(e){
 
 function updateTimeLabel(from, to){
     if(from >= 0){
-        let calcTime = CalculateTimeRelative(t1.offsetTop);
-        timeLabelStart.textContent = getFormattedTime(calcTime[0], calcTime[1]);;
+        let calcTime = YPositionToTime(currentTaskBlock.offsetTop);
+        timeLabelStart.textContent = getFormattedTime(calcTime[0], calcTime[1]);
+        currentTaskData.startTime = calcTime[0] * 60 + calcTime[1];
     }
     if(to >= 0){
-        let calcTime = CalculateTimeRelative(t1.offsetTop + t1.offsetHeight);
+        let calcTime = YPositionToTime(currentTaskBlock.offsetTop + currentTaskBlock.offsetHeight);
         timeLabelEnd.textContent = `- ${getFormattedTime(calcTime[0], calcTime[1])}`;
+        currentTaskData.endTime = calcTime[0] * 60 + calcTime[1];
     } 
 }
 
-function getFormattedTime(h, m) {
+export function getFormattedTime(h, m) {
     let period = h < 12 ? "AM" : "PM";
     let newH = h < 13 ? h :  Math.floor(h - 12);
     let hPadded = newH.toString().length === 2 ? newH : "0" + newH;
@@ -145,7 +159,7 @@ function getFormattedTime(h, m) {
     return `${hPadded}:${mPadded} ${period}`;
 }
 
-function CalculateTimeRelative(y){
+function YPositionToTime(y){
     let currentTimeBlock = getTimeBlockBasedOnPos(y + 1);
     let precedingTotalHeight = getTimeBlockRegionHeight(0, currentTimeBlock[0] - 1);
     let relHeightToCurrTimeBlock = y - precedingTotalHeight;

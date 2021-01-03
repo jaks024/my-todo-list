@@ -80,12 +80,18 @@
   font-size: 15px;
   font-weight: bold;
   margin: 0px 20px;
+  width: 88.5%;
 }
 
 .inputWarning{
   color: tomato;
   font-weight: normal;
   font-size: 12px;
+}
+
+.formDouble{
+  display: flex;
+  flex-direction: row;
 }
 
 #newListForm, #newTaskForm {
@@ -98,4 +104,8 @@
   display: flex;
   flex-direction: column;
   z-index: 200;
+}
+
+#newTaskForm {
+  height: 420px;
 }

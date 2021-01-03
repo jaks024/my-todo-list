@@ -10,11 +10,13 @@
   <link rel="stylesheet" href="./css/popup.css">
   <link rel="stylesheet" href="https://unpkg.com/simplebar@latest/dist/simplebar.css" />
 
-  <script defer type="module" src="TitleBarControls.js"></script>
-  <script defer type="module" src="./components/MenuControl.js"></script>
-  <script defer type="module" src="./components/CollectionDisplayer.js"></script>
-  <script defer type="module" src="ToDoCollectionManager.js"></script>
-  <script defer type="module" src="./components/TaskControls.js"></script>
+  <script  type="module" src="./components/CollectionSerializer.js"></script>
+  <script  type="module" src="./components/TitleBarControl.js"></script>
+  <script  type="module" src="./components/MenuControl.js"></script>
+  <script  type="module" src="./components/CollectionDisplayer.js"></script>
+  <script  type="module" src="./components/ToDoCollectionManager.js"></script>
+  <script  type="module" src="./components/TaskControl.js"></script>
+  <script type="module" src="./components/Initializer.js"></script>
   <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
 </head>
 
@@ -37,9 +39,9 @@
         <div class="border">
           <div class="scrollWrapper" data-simplebar>
             <div id="toDoCollectionList">
-              <div class="toDoCollectionItem">
+              <!--div class="toDoCollectionItem">
                 <span>Temp Name</span>
-              </div>
+              </div-->
             </div>
           </div>
         </div>
@@ -52,7 +54,7 @@
         <div class="rightContentPanel">
           <div class="scrollWrapper" data-simplebar>
             <div id="mainTimeContent">
-            <div id="timeContainer" class="timeContainerBlock">
+              <div id="timeContainer" class="timeContainerBlock">
                 <!-- div class="timeBlock">
                   <div class="timeLabelWrapper">
                     <div class="timeLabel">
@@ -62,20 +64,20 @@
                   <div class="timeResizeHandle"></div>
                 </div -->
               </div>
-              <div id="taskContainer" class="taskContainerBlock" >
-                  <div id="t1" class="taskBlockWrapper" >
-                    <div class="taskBlock draggable">
-                      <div class="taskBlockTitleBar">
-                        <span class="taskBlockTimeStart">9:15 AM</span>
-                        <span class="taskBlockTimeEnd">9:15 AM</span>
-                        <span class="taskBlockName taskText">Task name</span>
-                      </div>
-                      <span class="taskBlockDescription taskText">Task description</span>
+              <div id="taskContainer" class="taskContainerBlock">
+              <!--div id="t1" class="taskBlockWrapper">
+                  <div class="taskBlock draggable">
+                    <div class="taskBlockTitleBar">
+                      <span class="taskBlockTimeStart">9:15 AM</span>
+                      <span class="taskBlockTimeEnd">9:15 AM</span>
+                      <span class="taskBlockName taskText">Task name</span>
                     </div>
-                    <div class="taskBlockDragRight"></div>
-                    <div class="taskBlockDragBot"></div>
-                    <div class="taskBlockDragBotRight"></div>
-                </div>
+                    <span class="taskBlockDescription taskText">Task description</span>
+                  </div>
+                  <div class="taskBlockDragRight"></div>
+                  <div class="taskBlockDragBot"></div>
+                  <div class="taskBlockDragBotRight"></div>
+                </div -->
               </div>
             </div>
           </div>
@@ -86,7 +88,7 @@
     <div id="popup">
       <div id="popupCloseArea"></div>
       <div class="formWrapper">
-        <div id="newListForm">
+        <div id="newListForm" style="display:none">
           <span class="popupHeader">Create a new list of to dos</span>
           <span class="inputLabel">
             List name?
@@ -109,10 +111,40 @@
             <span class="inputWarning">* task must have a name!</span>
           </span>
           <input id="taskNameInputBox" class="formInputBox">
+          <div class="formDouble">
+            <span class="inputLabel">
+              Start date?
+              <span class="inputWarning">* mm/dd/yyyy</span>
+            </span>
+            <span class="inputLabel">
+              End date?
+              <span class="inputWarning">* mm/dd/yyyy</span>
+            </span>
+          </div>
+          <div class="formDouble">
+            <input id="taskStartDateInputBox" class="formInputBox">
+            <input id="taskEndDateInputBox" class="formInputBox">
+          </div>
+          <div class="formDouble">
+            <span class="inputLabel">
+              Start time?
+              <span class="inputWarning">* hh:mm (24h)</span>
+            </span>
+            <span class="inputLabel">
+              End time?
+              <span class="inputWarning">* hh:mm (24h)</span>
+            </span>
+          </div>
+          <div class="formDouble">
+            <input id="taskStartTimeInputBox" class="formInputBox">
+            <input id="taskEndTimeInputBox" class="formInputBox">
+          </div>
+
           <span class="inputLabel">
             What is it about?
           </span>
           <input id="taskDescriptionInputBox" class="formInputBox">
+
           <button id="createTaskBtn" class="formBtn">
             Create!
           </button>

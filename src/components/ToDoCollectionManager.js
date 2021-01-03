@@ -1,23 +1,26 @@
 import { ToDoCollection } from './ToDoObjects.js';
-import { DisplayCollection } from './CollectionDisplayer.js';
+import { ClosePopup } from './MenuControl.js';
+import { DisplayCollection, AddTaskIdToList } from './CollectionDisplayer.js';
 import { SaveCollectionToFile, LoadCollection } from './CollectionSerializer.js';
-
+import { GenerateRandomIdNoDup } from './Utilities.js';
 
 const collectionListDiv = document.getElementById('toDoCollectionList');
 const createCollectionBtn = document.getElementById('createCollectionBtn');
 const nameInput = document.getElementById('listNameInputBox');
 const descriptionInput = document.getElementById('listDescriptionInputBox');
 const taskContainer = document.getElementById('taskContainer');
-createCollectionBtn.onclick = MakeCollection;
+createCollectionBtn.addEventListener("click", function(){
+    if(isCollectionFormFilled()){
+        MakeCollection();
+        ClosePopup();
+    }  
+});
 
 var collectionIds = [];
 var collections = [];
 
-document.addEventListener("beforeunload", function (){
-    SaveCollectionToFile(collections);
-    console.log("saved to file during unload");
-}, false);
-
+const collectionIdMin = 0;
+const collectionIdMax = 5000;
 
 // expoert to initializer
 export async function InitCollection(){
@@ -30,9 +33,14 @@ export async function InitCollection(){
         collections.forEach(element => {
             console.log("made collection elem,ent " + element.id);
             CreateCollectionElement(element);
+            collectionIds.push(element.id);
+            element.tasks.forEach(task => {
+                AddTaskIdToList(task.id);
+            });
         });
 
         DisplayCollection(collections[0]);
+        console.log("collection ids: " + collectionIds);
     }
 }
 
@@ -40,26 +48,16 @@ export function SaveAllCollection(){
     SaveCollectionToFile(collections);
 }
 
-export function GenerateNewCollectionId(coll){
-    let min = 0;
-    let max = 1000000;
-    let num = 0;
-    while(coll.includes(num)){
-        num = Math.floor(Math.random() * (max - min) + min);
-    };
-    return num;
-}   
+function isCollectionFormFilled(){
+    return nameInput.value.length >= 1
+}
 
 function MakeCollection () {
     let newCollection = new ToDoCollection;
 
-    const id = GenerateNewCollectionId(collectionIds);
+    const id = GenerateRandomIdNoDup(collectionIds, collectionIdMin, collectionIdMax);
     const name = nameInput.value
     const description = descriptionInput.value;
-
-    if(name === "" || description === ""){
-        return;
-    }
 
     collectionIds.push(id);
 
@@ -92,6 +90,9 @@ function CreateCollectionElement(newCollection){
     newDiv.addEventListener('click', function(){
         SwitchToCollection(newCollection);
     });
+    newDiv.addEventListener('contextmenu', function(){
+        console.log("showing context menu of " + newCollection.id);
+    })
 }
 
 function SwitchToCollection(collection){

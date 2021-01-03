@@ -1,7 +1,7 @@
 //import { ToDoCollection } from './ToDoCollection.js';
 import { ToDoTask } from './ToDoObjects.js';
-import { OpenAddTaskPopup } from './MenuControl.js';
-import { GenerateNewCollectionId } from './ToDoCollectionManager.js';
+import { OpenAddTaskPopup, ClosePopup } from './MenuControl.js';
+import { GenerateRandomIdNoDup } from './Utilities.js';
 import { getFormattedTime } from './TaskControl.js';
 import  { setCurrentTask } from './TaskControl.js';
 import { SaveAllCollection } from './ToDoCollectionManager.js';
@@ -20,8 +20,11 @@ const taskEndTimeField = document.getElementById('taskEndTimeInputBox');
 const taskDescField = document.getElementById('taskDescriptionInputBox');
 const taskCreateBtn = document.getElementById('createTaskBtn');
 taskCreateBtn.addEventListener("click", function(){
-    CreateNewTask();
-    SaveAllCollection();
+    if(canCreateNewTask()){
+        CreateNewTask();
+        SaveAllCollection();
+        ClosePopup();
+    }
 });
 
 
@@ -30,6 +33,12 @@ const taskContainer = document.getElementById('taskContainer');
 
 var currentCollection = null;
 var taskIds = [];
+
+const taskIdMin = 10000;
+const taskIdMax = 10000000;
+
+// same size as css, in percent
+const taskBlockMinWidth = 50; 
 
 // resizing time blcoks variables
 var resizingElement = null;
@@ -52,6 +61,12 @@ export function InitDisplayer(){
     GenerateTimeBlocks();
 }
 
+// for toDoCollectionManager collection loading
+export function AddTaskIdToList(id){
+    taskIds.push(id);
+    console.log("task ids: " + taskIds);
+}
+
 
 // time blocks
 
@@ -71,7 +86,7 @@ export function DisplayCollection(collection){
         CreateTaskElement(element);
     });
 
-    console.log(`displaying ${collection.name}`);
+    console.log(`displaying ${collection.id}`);
 }
 
 export function getTimeBlockBasedOnPos(y){
@@ -152,23 +167,14 @@ function GenerateTimeBlocks(timeType){
 
 // tasks
 
-function getTaskInCollectionFromId(id){
-    currentCollection.tasks.forEach(element => {
-        if(element.id === id){
-            return element;
-        }
-    });
-    return null;
+function canCreateNewTask(){
+    return taskNameField.value.length > 0 && currentCollection
 }
 
-
 function CreateNewTask(){
-    if(!currentCollection){
-        return;
-    }
     let newTask = new ToDoTask;
-    let id = GenerateNewCollectionId(taskIds);
-    newTask.id = id + "-task";
+    let id = GenerateRandomIdNoDup(taskIds, taskIdMin, taskIdMax);
+    newTask.id = id;
     newTask.name = taskNameField.value;
     newTask.description = taskDescField.value;
     newTask.color = "0:0:0";
@@ -177,6 +183,7 @@ function CreateNewTask(){
     newTask.startDate = taskStartDateField.value;
     newTask.endDate = taskEndDateField.value;
     newTask.zIndex = 0;
+    newTask.width = taskBlockMinWidth;
 
     currentCollection.tasks.push(newTask);
     //console.log(currentCollection);
@@ -202,6 +209,7 @@ function CreateTaskElement(task){
     wrapperDiv.style.height = timeToYPosition(task.endTime) - yPos + "px";
     wrapperDiv.innerHTML = TaskTemplate(task);
     wrapperDiv.style.zIndex = Math.round(task.zIndex);
+    wrapperDiv.style.width = task.width + "%";
 
     wrapperDiv.addEventListener("mousedown", function(e) {
         setCurrentTask(task.id, task, e);

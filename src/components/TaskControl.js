@@ -121,7 +121,9 @@ function onResizeDrag(e){
     let width = e.clientX - initialClickX + initialWidth;
 
     if(width <= taskContainer.offsetWidth - currentTaskBlock.offsetLeft && resizeW){
-        currentTaskBlock.style.width = width / taskContainer.offsetWidth * 100 + "%";
+        let widthInPercent =  width / taskContainer.offsetWidth * 100;
+        currentTaskBlock.style.width = widthInPercent + "%";
+        currentTaskData.width = widthInPercent;
     }
     if(height <= taskContainer.offsetHeight - currentTaskBlock.offsetTop - 4 && resizeH
         && height >= minHeight){
@@ -141,14 +143,18 @@ function stopResizeDrag(e){
 function updateTimeLabel(from, to){
     if(from >= 0){
         let calcTime = YPositionToTime(currentTaskBlock.offsetTop);
-        timeLabelStart.textContent = getFormattedTime(calcTime[0], calcTime[1]);
-        currentTaskData.startTime = calcTime[0] * 60 + calcTime[1];
+        if(calcTime != -1){
+            timeLabelStart.textContent = getFormattedTime(calcTime[0], calcTime[1]);
+            currentTaskData.startTime = calcTime[0] * 60 + calcTime[1];
+        }
     }
     if(to >= 0){
         let calcTime = YPositionToTime(currentTaskBlock.offsetTop + currentTaskBlock.offsetHeight);
-        timeLabelEnd.textContent = `- ${getFormattedTime(calcTime[0], calcTime[1])}`;
-        currentTaskData.endTime = calcTime[0] * 60 + calcTime[1];
-    } 
+        if(calcTime != -1){
+            timeLabelEnd.textContent = `- ${getFormattedTime(calcTime[0], calcTime[1])}`;
+            currentTaskData.endTime = calcTime[0] * 60 + calcTime[1];
+        } 
+    }
 }
 
 export function getFormattedTime(h, m) {
@@ -161,6 +167,9 @@ export function getFormattedTime(h, m) {
 
 function YPositionToTime(y){
     let currentTimeBlock = getTimeBlockBasedOnPos(y + 1);
+    if(!currentTimeBlock){
+        return -1;
+    }
     let precedingTotalHeight = getTimeBlockRegionHeight(0, currentTimeBlock[0] - 1);
     let relHeightToCurrTimeBlock = y - precedingTotalHeight;
     let heightToMinutes = Math.round(relHeightToCurrTimeBlock / currentTimeBlock[1] * 60);

@@ -1,3 +1,6 @@
+import { SaveAllCollection } from './ToDoCollectionManager.js';
+
+
 const minimizeBtn = document.getElementById('minimizeTitleBarBtn');
 const maximizeBtn = document.getElementById('maximizeTitleBarBtn');
 const exitBtn = document.getElementById('exitTitleBarBtn');
@@ -8,10 +11,12 @@ exitBtn.onclick = exit;
 const { remote } = require('electron');
 
 function minimize(){
+    SaveAllCollection();
     remote.BrowserWindow.getFocusedWindow().minimize();
 }
 
 function maximize(){
+    SaveAllCollection();
     let currentWindow = remote.BrowserWindow.getFocusedWindow();
     if(currentWindow.isMaximized()){
         remote.BrowserWindow.getFocusedWindow().unmaximize();
@@ -23,5 +28,8 @@ function maximize(){
 }
 
 function exit(){
-    remote.BrowserWindow.getFocusedWindow().close();
+    SaveAllCollection();
+    setTimeout(function(){
+        remote.BrowserWindow.getFocusedWindow().close();
+    }, 500);
 }

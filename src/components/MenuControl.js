@@ -26,6 +26,6 @@ export function OpenAddTaskPopup(){
     newListForm.style.display = "none";
 }
 
-function ClosePopup(){
+export function ClosePopup(){
     popup.style.display = "none";
 }

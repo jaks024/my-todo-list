@@ -15,4 +15,5 @@ export function ToDoTask() {
     this.startDate = "01/01/0000";
     this.endDate = "01/01/0000";
     this.zIndex = 0;
+    this.width = 50;
 }

@@ -27,7 +27,8 @@ export function LoadCollection() {
         fs.readFile(savePath, 'utf8', function(err, data) {
             if(err) {
                 console.log(err);
-                resolve([]); 
+                resolve(null); 
+                return;
             }
             console.log(data);
             resolve(JSON.parse(data));

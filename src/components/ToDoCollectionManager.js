@@ -1,18 +1,29 @@
 import { ToDoCollection } from './ToDoObjects.js';
-import { ClosePopup } from './MenuControl.js';
-import { DisplayCollection, AddTaskIdToList } from './CollectionDisplayer.js';
+import { ClosePopup, isInEditing } from './MenuControl.js';
+import { DisplayCollection, 
+    AddTaskIdToList, 
+    collectionNameField,
+    collectionDescField } from './CollectionDisplayer.js';
 import { SaveCollectionToFile, LoadCollection } from './CollectionSerializer.js';
 import { GenerateRandomIdNoDup } from './Utilities.js';
+import { OpenContextMenu, currentCollection } from './ContextMenuControl.js';
 
 const collectionListDiv = document.getElementById('toDoCollectionList');
-const createCollectionBtn = document.getElementById('createCollectionBtn');
-const nameInput = document.getElementById('listNameInputBox');
-const descriptionInput = document.getElementById('listDescriptionInputBox');
-const taskContainer = document.getElementById('taskContainer');
+// to MenuControl for editing form
+export const collectionNameInput = document.getElementById('collectionNameIB');
+export const collectionDescInput = document.getElementById('collectionDescriptionIB');
+// to menu control
+export const createCollectionBtn = document.getElementById('collectionConfirmBtn');
 createCollectionBtn.addEventListener("click", function(){
     if(isCollectionFormFilled()){
-        MakeCollection();
+        if(isInEditing){
+            UpdateCollection(currentCollection);
+        } else {
+            MakeCollection();
+        }
+        SaveCollectionToFile (collections);
         ClosePopup();
+        ClearCollectionForm();
     }  
 });
 
@@ -49,15 +60,20 @@ export function SaveAllCollection(){
 }
 
 function isCollectionFormFilled(){
-    return nameInput.value.length >= 1
+    return collectionNameInput.value.length >= 1
+}
+
+function ClearCollectionForm(){
+    collectionNameInput.value = "";
+    collectionDescInput.value = "";
 }
 
 function MakeCollection () {
     let newCollection = new ToDoCollection;
 
     const id = GenerateRandomIdNoDup(collectionIds, collectionIdMin, collectionIdMax);
-    const name = nameInput.value
-    const description = descriptionInput.value;
+    const name = collectionNameInput.value
+    const description = collectionDescInput.value;
 
     collectionIds.push(id);
 
@@ -69,8 +85,6 @@ function MakeCollection () {
     CreateCollectionElement(newCollection);
 
     collections.push(newCollection);
-
-    SaveCollectionToFile (collections);
 }
 
 function CreateCollectionElement(newCollection){
@@ -90,9 +104,23 @@ function CreateCollectionElement(newCollection){
     newDiv.addEventListener('click', function(){
         SwitchToCollection(newCollection);
     });
-    newDiv.addEventListener('contextmenu', function(){
+    newDiv.addEventListener('contextmenu', function(e){
         console.log("showing context menu of " + newCollection.id);
-    })
+        OpenContextMenu(e.pageX, e.pageY, false, newCollection);
+    });
+}
+
+function UpdateCollection(collection){
+    collection.name = collectionNameInput.value
+    collection.description = collectionDescInput.value;
+    let collElement = document.getElementById(collection.id);
+    collElement.firstChild.textContent = collection.name;
+    console.log("updated " + collection.id);
+
+    if(currentCollection.id === collection.id){
+        collectionNameField.textContent = collection.name;
+        collectionDescField.textContent = collection.description; 
+    }
 }
 
 function SwitchToCollection(collection){

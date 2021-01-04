@@ -94,18 +94,15 @@
   flex-direction: row;
 }
 
-#newListForm, #newTaskForm {
+#collectionForm, #taskForm {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
-  height: 300px;
+  height: fit-content;
   background-color: #24282c;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   z-index: 200;
-}
-
-#newTaskForm {
-  height: 420px;
+  padding-bottom: 30px;
 }

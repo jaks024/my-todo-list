@@ -5,10 +5,10 @@ import { GenerateRandomIdNoDup } from './Utilities.js';
 import { getFormattedTime } from './TaskControl.js';
 import  { setCurrentTask } from './TaskControl.js';
 import { SaveAllCollection } from './ToDoCollectionManager.js';
+import { OpenContextMenu } from './ContextMenuControl.js';
 
-
-const collectionNameField = document.getElementById("d-collectionName");
-const collectionDescField = document.getElementById("d-collectionDesc");
+export const collectionNameField = document.getElementById("d-collectionName");
+export const collectionDescField = document.getElementById("d-collectionDesc");
 
 
 // task popups
@@ -18,12 +18,14 @@ const taskEndDateField = document.getElementById('taskEndDateInputBox');
 const taskStartTimeField = document.getElementById('taskStartTimeInputBox');
 const taskEndTimeField = document.getElementById('taskEndTimeInputBox');
 const taskDescField = document.getElementById('taskDescriptionInputBox');
-const taskCreateBtn = document.getElementById('createTaskBtn');
+// to menu control
+export const taskCreateBtn = document.getElementById('taskConfirmBtn');
 taskCreateBtn.addEventListener("click", function(){
     if(canCreateNewTask()){
         CreateNewTask();
         SaveAllCollection();
         ClosePopup();
+        ClearTaskForm();
     }
 });
 
@@ -171,6 +173,11 @@ function canCreateNewTask(){
     return taskNameField.value.length > 0 && currentCollection
 }
 
+function ClearTaskForm(){
+    taskNameField.value = "";
+    taskDescField.value = "";
+}
+
 function CreateNewTask(){
     let newTask = new ToDoTask;
     let id = GenerateRandomIdNoDup(taskIds, taskIdMin, taskIdMax);
@@ -215,6 +222,10 @@ function CreateTaskElement(task){
         setCurrentTask(task.id, task, e);
         console.log("click on " + task.id);
     }, false);
+    wrapperDiv.addEventListener('contextmenu', function(e){
+        console.log("showing context menu of task " + task.id);
+        OpenContextMenu(e.pageX, e.pageY, true, task);
+    });
     console.log(wrapperDiv);
 
     taskContainer.appendChild(wrapperDiv);

@@ -31,5 +31,5 @@ function exit(){
     SaveAllCollection();
     setTimeout(function(){
         remote.BrowserWindow.getFocusedWindow().close();
-    }, 500);
+    }, 250);
 }

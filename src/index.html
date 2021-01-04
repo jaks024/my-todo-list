@@ -3,19 +3,20 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Hello World!</title>
+  <title>My To Do List</title>
 
   <link rel="stylesheet" href="./css/cssreset.css">
   <link rel="stylesheet" href="./css/index.css">
   <link rel="stylesheet" href="./css/popup.css">
+  <link rel="stylesheet" href="./css/contextMenu.css"/>
   <link rel="stylesheet" href="https://unpkg.com/simplebar@latest/dist/simplebar.css" />
 
-  <script  type="module" src="./components/CollectionSerializer.js"></script>
-  <script  type="module" src="./components/TitleBarControl.js"></script>
-  <script  type="module" src="./components/MenuControl.js"></script>
-  <script  type="module" src="./components/CollectionDisplayer.js"></script>
-  <script  type="module" src="./components/ToDoCollectionManager.js"></script>
-  <script  type="module" src="./components/TaskControl.js"></script>
+  <script type="module" src="./components/CollectionSerializer.js"></script>
+  <script type="module" src="./components/TitleBarControl.js"></script>
+  <script type="module" src="./components/MenuControl.js"></script>
+  <script type="module" src="./components/CollectionDisplayer.js"></script>
+  <script type="module" src="./components/ToDoCollectionManager.js"></script>
+  <script type="module" src="./components/TaskControl.js"></script>
   <script type="module" src="./components/Initializer.js"></script>
   <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
 </head>
@@ -29,10 +30,10 @@
       <span id="exitTitleBarBtn" class="titleBarBtn">&times;</span>
     </div>
     <div class="panels">
-      <nav id="nav-block" >
+      <nav id="nav-block">
         <div class="mainHeader">
           <span class="bigLabel">Collections</span>
-          <button id="toDoAddPopupBtn" class="formBtn">
+          <button id="toDoCollectionAddPopupBtn" class="formBtn">
             +
           </button>
         </div>
@@ -65,7 +66,7 @@
                 </div -->
               </div>
               <div id="taskContainer" class="taskContainerBlock">
-              <!--div id="t1" class="taskBlockWrapper">
+                <!--div id="t1" class="taskBlockWrapper">
                   <div class="taskBlock draggable">
                     <div class="taskBlockTitleBar">
                       <span class="taskBlockTimeStart">9:15 AM</span>
@@ -88,23 +89,23 @@
     <div id="popup">
       <div id="popupCloseArea"></div>
       <div class="formWrapper">
-        <div id="newListForm" style="display:none">
-          <span class="popupHeader">Create a new list of to dos</span>
+        <div id="collectionForm">
+          <span id="collectionFormHeader" class="popupHeader">Create a new list of to dos</span>
           <span class="inputLabel">
             List name?
             <span class="inputWarning">* list must have a name!</span>
           </span>
-          <input id="listNameInputBox" class="formInputBox">
+          <input id="collectionNameIB" class="formInputBox">
           <span class="inputLabel">
             What is it about?
           </span>
-          <input id="listDescriptionInputBox" class="formInputBox">
-          <button id="createCollectionBtn" class="formBtn">
+          <input id="collectionDescriptionIB" class="formInputBox">
+          <button id="collectionConfirmBtn" class="formBtn">
             Create!
           </button>
         </div>
-        <div id="newTaskForm">
-          <span class="popupHeader">Create a new task</span>
+        <div id="taskForm">
+          <span id="taskFormHeader" class="popupHeader">Create a new task</span>
           <span class="inputLabel">
             Task name?
             <span class="inputWarning">* task must have a name!</span>
@@ -144,10 +145,18 @@
           </span>
           <input id="taskDescriptionInputBox" class="formInputBox">
 
-          <button id="createTaskBtn" class="formBtn">
+          <button id="taskConfirmBtn" class="formBtn">
             Create!
           </button>
         </div>
+      </div>
+    </div>
+
+    <div id="contextCloseArea"></div>
+    <div id="contextMenu">
+      <div class="contextMenuItemWrapper">
+        <span id="contextMenuEditBtn" class="contextMenuItem">Edit</span>
+        <span id="contextMenuDeleteBtn" class="contextMenuItem">Delete</span>
       </div>
     </div>
   </div>

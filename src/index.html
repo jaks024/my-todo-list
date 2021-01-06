@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="./css/cssreset.css">
   <link rel="stylesheet" href="./css/index.css">
   <link rel="stylesheet" href="./css/popup.css">
-  <link rel="stylesheet" href="./css/contextMenu.css"/>
+  <link rel="stylesheet" href="./css/contextMenu.css" />
   <link rel="stylesheet" href="https://unpkg.com/simplebar@latest/dist/simplebar.css" />
 
   <script type="module" src="./components/CollectionSerializer.js"></script>
@@ -111,35 +111,22 @@
             <span class="inputWarning">* task must have a name!</span>
           </span>
           <input id="taskNameInputBox" class="formInputBox">
-          <div class="formDouble">
-            <span class="inputLabel">
-              Start date?
-              <span class="inputWarning">* mm/dd/yyyy</span>
-            </span>
-            <span class="inputLabel">
-              End date?
-              <span class="inputWarning">* mm/dd/yyyy</span>
-            </span>
+          <div id="taskFormTimeSection">
+            <div class="formDouble">
+              <span class="inputLabel">
+                Start time?
+                <span class="inputWarning">* hh:mm (24h)</span>
+              </span>
+              <span class="inputLabel">
+                End time?
+                <span class="inputWarning">* hh:mm (24h)</span>
+              </span>
+            </div>
+            <div class="formDouble">
+              <input id="taskStartTimeInputBox" class="formInputBox">
+              <input id="taskEndTimeInputBox" class="formInputBox">
+            </div>
           </div>
-          <div class="formDouble">
-            <input id="taskStartDateInputBox" class="formInputBox">
-            <input id="taskEndDateInputBox" class="formInputBox">
-          </div>
-          <div class="formDouble">
-            <span class="inputLabel">
-              Start time?
-              <span class="inputWarning">* hh:mm (24h)</span>
-            </span>
-            <span class="inputLabel">
-              End time?
-              <span class="inputWarning">* hh:mm (24h)</span>
-            </span>
-          </div>
-          <div class="formDouble">
-            <input id="taskStartTimeInputBox" class="formInputBox">
-            <input id="taskEndTimeInputBox" class="formInputBox">
-          </div>
-
           <span class="inputLabel">
             What is it about?
           </span>

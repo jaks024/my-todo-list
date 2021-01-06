@@ -1,4 +1,5 @@
 import { OpenEditCollectionPopup, OpenEditTaskPopup } from './MenuControl.js';
+import { getCollection, setCollection, SaveAllCollection } from './ToDoCollectionManager.js';
 
 const contextMenu = document.getElementById("contextMenu")
 const contextMenuEditBtn = document.getElementById("contextMenuEditBtn");
@@ -13,21 +14,24 @@ contextCloseArea.addEventListener('click', CloseContextMenu, false);
 export var currentTask = null;
 
 // to toDoCollectionManager for button onclick editing updates
-export var currentCollection = null;
+export var currentContextCollection = null;
+var inTaskContextMenu = false;
 
 const menuEdgePadding = 10;
 
-export function OpenContextMenu(x, y, isTask, item){
-    contextCloseArea.style.display = "block";
-    contextMenu.style.display = "block";
-    CalculateContextMenuPosition(x, y);
-    if(isTask){
-        currentTask = item;
-        currentCollection = null
-    } else {
-        currentCollection = item;
-        currentTask = null;
-    }
+export function OpenContextMenuCollection(x, y, collection){
+    EnableContextMenu(x, y);
+    currentTask = null;
+    currentContextCollection = collection;
+    inTaskContextMenu = false;
+}
+
+export function OpenContextMenuTask(x, y, task, collection){
+    EnableContextMenu(x, y);
+    currentTask = task;
+    currentContextCollection = collection;
+    inTaskContextMenu = true;
+    console.log(`current task id ${task.id} and coll id ${collection.id}`);
 }
 
 export function CloseContextMenu(){
@@ -35,19 +39,43 @@ export function CloseContextMenu(){
     contextMenu.style.display = "none";
 }
 
+function EnableContextMenu(x, y){
+    contextCloseArea.style.display = "block";
+    contextMenu.style.display = "block";
+    CalculateContextMenuPosition(x, y);
+}
 
 
 function OpenEditMenu(){
     if(currentTask){
         OpenEditTaskPopup(currentTask);
     } else {
-        OpenEditCollectionPopup(currentCollection);
+        OpenEditCollectionPopup(currentContextCollection);
     }
     CloseContextMenu();
 }
 
 function DeleteCurrentlySelected(){
-    console.log("delete");
+    if(!currentContextCollection){
+        return;
+    }
+
+    if(inTaskContextMenu && currentTask){
+       currentContextCollection.tasks = currentContextCollection.tasks.filter(function(task) {
+           return task.id !== currentTask.id; 
+       });
+        console.log(`deleted ${currentTask} from ${currentContextCollection.id}`);
+        document.getElementById(currentTask.id).outerHTML = "";
+    } else {
+         setCollection(getCollection().filter(function(coll){
+             return coll.id !== currentContextCollection.id; 
+         }));
+         console.log("deleted " + currentContextCollection.id);
+         document.getElementById(currentContextCollection.id).outerHTML = "";
+    }        
+    currentTask = null;
+    currentContextCollection = null;
+    SaveAllCollection();
     CloseContextMenu();
 }
 

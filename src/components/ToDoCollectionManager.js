@@ -6,9 +6,9 @@ import { DisplayCollection,
     collectionDescField } from './CollectionDisplayer.js';
 import { SaveCollectionToFile, LoadCollection } from './CollectionSerializer.js';
 import { GenerateRandomIdNoDup } from './Utilities.js';
-import { OpenContextMenu, currentCollection } from './ContextMenuControl.js';
+import { OpenContextMenuCollection, currentContextCollection } from './ContextMenuControl.js';
 
-const collectionListDiv = document.getElementById('toDoCollectionList');
+
 // to MenuControl for editing form
 export const collectionNameInput = document.getElementById('collectionNameIB');
 export const collectionDescInput = document.getElementById('collectionDescriptionIB');
@@ -17,7 +17,7 @@ export const createCollectionBtn = document.getElementById('collectionConfirmBtn
 createCollectionBtn.addEventListener("click", function(){
     if(isCollectionFormFilled()){
         if(isInEditing){
-            UpdateCollection(currentCollection);
+            UpdateCollection(currentContextCollection);
         } else {
             MakeCollection();
         }
@@ -26,6 +26,8 @@ createCollectionBtn.addEventListener("click", function(){
         ClearCollectionForm();
     }  
 });
+
+const collectionListDiv = document.getElementById('toDoCollectionList');
 
 var collectionIds = [];
 var collections = [];
@@ -55,6 +57,15 @@ export async function InitCollection(){
     }
 }
 
+export function getCollection(){
+    return collections;
+}
+
+export function setCollection(newCollection){
+    collections = newCollection;
+}
+
+// saving remotely
 export function SaveAllCollection(){
     SaveCollectionToFile(collections);
 }
@@ -106,7 +117,7 @@ function CreateCollectionElement(newCollection){
     });
     newDiv.addEventListener('contextmenu', function(e){
         console.log("showing context menu of " + newCollection.id);
-        OpenContextMenu(e.pageX, e.pageY, false, newCollection);
+        OpenContextMenuCollection(e.pageX, e.pageY, newCollection);
     });
 }
 
@@ -117,7 +128,8 @@ function UpdateCollection(collection){
     collElement.firstChild.textContent = collection.name;
     console.log("updated " + collection.id);
 
-    if(currentCollection.id === collection.id){
+    // for right panel headers
+    if(currentContextCollection.id === collection.id){
         collectionNameField.textContent = collection.name;
         collectionDescField.textContent = collection.description; 
     }

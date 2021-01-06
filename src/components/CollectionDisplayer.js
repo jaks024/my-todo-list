@@ -1,28 +1,32 @@
 //import { ToDoCollection } from './ToDoCollection.js';
 import { ToDoTask } from './ToDoObjects.js';
-import { OpenAddTaskPopup, ClosePopup } from './MenuControl.js';
+import { OpenAddTaskPopup, ClosePopup, isInEditing } from './MenuControl.js';
 import { GenerateRandomIdNoDup } from './Utilities.js';
 import { getFormattedTime } from './TaskControl.js';
 import  { setCurrentTask } from './TaskControl.js';
 import { SaveAllCollection } from './ToDoCollectionManager.js';
-import { OpenContextMenu } from './ContextMenuControl.js';
+import { OpenContextMenuTask } from './ContextMenuControl.js';
 
 export const collectionNameField = document.getElementById("d-collectionName");
 export const collectionDescField = document.getElementById("d-collectionDesc");
 
 
 // task popups
-const taskNameField = document.getElementById('taskNameInputBox');
-const taskStartDateField = document.getElementById('taskStartDateInputBox');
-const taskEndDateField = document.getElementById('taskEndDateInputBox');
+export const taskNameField = document.getElementById('taskNameInputBox');
+export const taskDescField = document.getElementById('taskDescriptionInputBox');
 const taskStartTimeField = document.getElementById('taskStartTimeInputBox');
 const taskEndTimeField = document.getElementById('taskEndTimeInputBox');
-const taskDescField = document.getElementById('taskDescriptionInputBox');
+
 // to menu control
-export const taskCreateBtn = document.getElementById('taskConfirmBtn');
-taskCreateBtn.addEventListener("click", function(){
-    if(canCreateNewTask()){
-        CreateNewTask();
+export const taskConfirmBtn = document.getElementById('taskConfirmBtn');
+taskConfirmBtn.addEventListener("click", function(){
+    if(isTaskFormFilled()){
+        if(isInEditing && currentTaskData){
+            UpdateTask(currentTaskData);
+            currentTaskData = null;
+        } else {    
+            CreateNewTask();
+        }
         SaveAllCollection();
         ClosePopup();
         ClearTaskForm();
@@ -34,6 +38,7 @@ taskCreateBtn.addEventListener("click", function(){
 const taskContainer = document.getElementById('taskContainer');
 
 var currentCollection = null;
+var currentTaskData = null; // for editing
 var taskIds = [];
 
 const taskIdMin = 10000;
@@ -169,13 +174,24 @@ function GenerateTimeBlocks(timeType){
 
 // tasks
 
-function canCreateNewTask(){
+function isTaskFormFilled(){
     return taskNameField.value.length > 0 && currentCollection
 }
 
 function ClearTaskForm(){
     taskNameField.value = "";
     taskDescField.value = "";
+}
+
+function UpdateTask(task){
+    task.name = taskNameField.value;
+    task.description = taskDescField.value;
+
+    let taskElement = document.getElementById(task.id);
+    taskElement.querySelector(".taskBlockName").textContent = task.name;
+    taskElement.querySelector(".taskBlockDescription").textContent = task.description;
+
+    console.log("updated: " + task);
 }
 
 function CreateNewTask(){
@@ -187,8 +203,6 @@ function CreateNewTask(){
     newTask.color = "0:0:0";
     newTask.startTime = stringTimeToSeconds(taskStartTimeField.value);
     newTask.endTime = stringTimeToSeconds(taskEndTimeField.value);
-    newTask.startDate = taskStartDateField.value;
-    newTask.endDate = taskEndDateField.value;
     newTask.zIndex = 0;
     newTask.width = taskBlockMinWidth;
 
@@ -224,12 +238,15 @@ function CreateTaskElement(task){
     }, false);
     wrapperDiv.addEventListener('contextmenu', function(e){
         console.log("showing context menu of task " + task.id);
-        OpenContextMenu(e.pageX, e.pageY, true, task);
+        console.log("the current collection id is " + currentCollection.id);
+        OpenContextMenuTask(e.pageX, e.pageY, task, currentCollection);
+        currentTaskData = task;
     });
     console.log(wrapperDiv);
 
     taskContainer.appendChild(wrapperDiv);
 }
+
 
 function TaskTemplate(task){
     let startTime = getFormattedTime(Math.floor(task.startTime / 60), Math.round(((task.startTime / 60) % 1) * 60));
@@ -265,12 +282,6 @@ function stringTimeToSeconds(s){
 
 function SetAndOpenAddTaskPopup(startTime){
     OpenAddTaskPopup();
-
-    let date = new Date();
-    
-    let dateNow = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
-    taskStartDateField.value = dateNow;
-    taskEndDateField.value = dateNow; 
 
     taskStartTimeField.value = `${startTime}:00`;
     taskEndTimeField.value = `${startTime}:30`;

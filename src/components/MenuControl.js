@@ -2,7 +2,9 @@
 import { createCollectionBtn, 
     collectionNameInput,
     collectionDescInput } from './ToDoCollectionManager.js';
-import { taskCreateBtn } from './CollectionDisplayer.js';
+import { taskConfirmBtn,
+    taskNameField,
+    taskDescField } from './CollectionDisplayer.js';
 
 const popup = document.getElementById('popup');
 
@@ -12,6 +14,7 @@ const collectionFormHeader = document.getElementById('collectionFormHeader');
 
 const taskForm = document.getElementById('taskForm');
 const taskFormHeader = document.getElementById('taskFormHeader');
+const taskFormTimeSection = document.getElementById('taskFormTimeSection');
 
 
 const popupCloseArea = document.getElementById('popupCloseArea');
@@ -32,7 +35,7 @@ export function OpenAddCollectionPopup(){
 // to CollectionDisplayer
 export function OpenAddTaskPopup(){
     taskFormHeader.textContent = "Create a new task!"
-    taskCreateBtn.textContent = "Create!";
+    taskConfirmBtn.textContent = "Create!";
     DisplayPopup(true);
     isInEditing = false;
 }
@@ -50,7 +53,10 @@ export function OpenEditCollectionPopup(collection){
 // to ContextMenuControl
 export function OpenEditTaskPopup(task){
     taskFormHeader.textContent = `Edit ${task.name}`;
-    taskCreateBtn.textContent = "Update!";
+    taskConfirmBtn.textContent = "Update!";
+    taskNameField.value = task.name;
+    taskDescField.value = task.description;
+    taskFormTimeSection.style.display = "none";
     DisplayPopup(true);
     isInEditing = true;
 }
@@ -58,11 +64,9 @@ export function OpenEditTaskPopup(task){
 // to CollectionDisplayer, ContextMenuControl
 export function ClosePopup(){
     popup.style.display = "none";
+    taskFormTimeSection.style.display = "block";
 }
 
-function SetFormTexts(){
-
-}
 
 export function DisplayPopup(isTask){
     popup.style.display = "block";

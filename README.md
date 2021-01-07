@@ -2,6 +2,9 @@
 A 24 hour, non date based to do list desktop application built with Electron.
 This is a personal project in attempt to recreate Google Calendar day view. 
 
+## Download
+[v1.0](https://github.com/jaks024/my-todo-list/releases/tag/v1.0)
+
 ## Features
 As many lists of to dos as you want (almost), and as many tasks within one list as you want (almost) 
 A draggable, flexible time scale (task dimension are scaled to the time scale)

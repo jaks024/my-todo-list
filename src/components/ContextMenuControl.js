@@ -31,7 +31,7 @@ export function OpenContextMenuTask(x, y, task, collection){
     currentTask = task;
     currentContextCollection = collection;
     inTaskContextMenu = true;
-    console.log(`current task id ${task.id} and coll id ${collection.id}`);
+    //console.log(`current task id ${task.id} and coll id ${collection.id}`);
 }
 
 export function CloseContextMenu(){
@@ -64,13 +64,13 @@ function DeleteCurrentlySelected(){
        currentContextCollection.tasks = currentContextCollection.tasks.filter(function(task) {
            return task.id !== currentTask.id; 
        });
-        console.log(`deleted ${currentTask} from ${currentContextCollection.id}`);
+        //console.log(`deleted ${currentTask} from ${currentContextCollection.id}`);
         document.getElementById(currentTask.id).outerHTML = "";
     } else {
          setCollection(getCollection().filter(function(coll){
              return coll.id !== currentContextCollection.id; 
          }));
-         console.log("deleted " + currentContextCollection.id);
+         //console.log("deleted " + currentContextCollection.id);
          document.getElementById(currentContextCollection.id).outerHTML = "";
     }        
     currentTask = null;

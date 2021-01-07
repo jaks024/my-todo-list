@@ -71,7 +71,7 @@ export function InitDisplayer(){
 // for toDoCollectionManager collection loading
 export function AddTaskIdToList(id){
     taskIds.push(id);
-    console.log("task ids: " + taskIds);
+    //console.log("task ids: " + taskIds);
 }
 
 
@@ -81,11 +81,15 @@ export function DisplayCollection(collection){
 
     if(currentCollection != null &&
          collection.id === currentCollection.id){
-        console.log(`already displaying ${collection.id}`);
+        //console.log(`already displaying ${collection.id}`);
         return;
     }
     taskContainer.innerHTML = "";
     currentCollection = collection;
+    if(!currentCollection){
+        return;
+    }
+
     collectionNameField.innerText = currentCollection.name;
     collectionDescField.innerText = currentCollection.description;
 
@@ -93,7 +97,7 @@ export function DisplayCollection(collection){
         CreateTaskElement(element);
     });
 
-    console.log(`displaying ${collection.id}`);
+    //console.log(`displaying ${collection.id}`);
 }
 
 export function getTimeBlockBasedOnPos(y){
@@ -149,7 +153,7 @@ function GenerateTimeBlocks(timeType){
         let startTime = i + 1;
         timeLabelWrapper.addEventListener("click", function(e){
             SetAndOpenAddTaskPopup(startTime);
-            console.log(startTime);
+            //console.log(startTime);
         });
 
         let timeResizeHandle = document.createElement("div");
@@ -191,7 +195,7 @@ function UpdateTask(task){
     taskElement.querySelector(".taskBlockName").textContent = task.name;
     taskElement.querySelector(".taskBlockDescription").textContent = task.description;
 
-    console.log("updated: " + task);
+    //console.log("updated: " + task);
 }
 
 function CreateNewTask(){
@@ -215,12 +219,12 @@ function CreateNewTask(){
 
     CreateTaskElement(newTask)
 
-    console.log("created " + newTask.id);
+   // console.log("created " + newTask.id);
 }
 
 function CreateTaskElement(task){
     let yPos = timeToYPosition(task.startTime);
-    console.log("starttime: " + task.startTime + "; ypos: " + yPos);
+    //console.log("starttime: " + task.startTime + "; ypos: " + yPos);
 
     var wrapperDiv = document.createElement("div");
     wrapperDiv.id = task.id;
@@ -234,15 +238,15 @@ function CreateTaskElement(task){
 
     wrapperDiv.addEventListener("mousedown", function(e) {
         setCurrentTask(task.id, task, e);
-        console.log("click on " + task.id);
+        //console.log("click on " + task.id);
     }, false);
     wrapperDiv.addEventListener('contextmenu', function(e){
-        console.log("showing context menu of task " + task.id);
-        console.log("the current collection id is " + currentCollection.id);
+        //console.log("showing context menu of task " + task.id);
+        //console.log("the current collection id is " + currentCollection.id);
         OpenContextMenuTask(e.pageX, e.pageY, task, currentCollection);
         currentTaskData = task;
     });
-    console.log(wrapperDiv);
+    //console.log(wrapperDiv);
 
     taskContainer.appendChild(wrapperDiv);
 }

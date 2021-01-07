@@ -16,21 +16,21 @@ export function SaveCollectionToFile(collection) {
         if (err) {
             return console.log(err);
         }
-        console.log(data);
+        //console.log(data);
     })
-    console.log(path);
+    //console.log(path);
 }
 
 export function LoadCollection() {
     return new Promise(resolve => {
-        console.log("loaded data");
+        //console.log("loaded data");
         fs.readFile(savePath, 'utf8', function(err, data) {
             if(err) {
-                console.log(err);
+               // console.log(err);
                 resolve(null); 
                 return;
             }
-            console.log(data);
+           // console.log(data);
             resolve(JSON.parse(data));
         });
     });

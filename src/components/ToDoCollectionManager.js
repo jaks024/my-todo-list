@@ -38,13 +38,13 @@ const collectionIdMax = 5000;
 // expoert to initializer
 export async function InitCollection(){
     let loadedColl = await LoadCollection();
-    console.log(loadedColl);
+    //console.log(loadedColl);
     if(loadedColl){
         collections = loadedColl;
-        console.log("loaded collection v");
-        console.log(collections);
+       // console.log("loaded collection v");
+        //console.log(collections);
         collections.forEach(element => {
-            console.log("made collection elem,ent " + element.id);
+           // console.log("made collection elem,ent " + element.id);
             CreateCollectionElement(element);
             collectionIds.push(element.id);
             element.tasks.forEach(task => {
@@ -53,7 +53,7 @@ export async function InitCollection(){
         });
 
         DisplayCollection(collections[0]);
-        console.log("collection ids: " + collectionIds);
+        //console.log("collection ids: " + collectionIds);
     }
 }
 
@@ -116,7 +116,7 @@ function CreateCollectionElement(newCollection){
         SwitchToCollection(newCollection);
     });
     newDiv.addEventListener('contextmenu', function(e){
-        console.log("showing context menu of " + newCollection.id);
+        //console.log("showing context menu of " + newCollection.id);
         OpenContextMenuCollection(e.pageX, e.pageY, newCollection);
     });
 }
@@ -126,7 +126,7 @@ function UpdateCollection(collection){
     collection.description = collectionDescInput.value;
     let collElement = document.getElementById(collection.id);
     collElement.firstChild.textContent = collection.name;
-    console.log("updated " + collection.id);
+    //console.log("updated " + collection.id);
 
     // for right panel headers
     if(currentContextCollection.id === collection.id){

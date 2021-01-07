@@ -4,7 +4,7 @@ import { InitCollection } from './ToDoCollectionManager.js';
 document.addEventListener("DOMContentLoaded", initialize, false);
 
 function initialize(){
-    console.log('loaded');
+    //console.log('loaded');
     InitDisplayer();
     InitCollection();
 }

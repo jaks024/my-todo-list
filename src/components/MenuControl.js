@@ -72,5 +72,5 @@ export function DisplayPopup(isTask){
     popup.style.display = "block";
     collectionForm.style.display = isTask ? "none" : "flex";
     taskForm.style.display = isTask? "flex" : "none";
-    console.log("opened popup");
+    //console.log("opened popup");
 }

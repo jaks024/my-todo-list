@@ -2,7 +2,7 @@
   "name": "my-todo-list",
   "productName": "my-todo-list",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "A 24 hour, non date based to do list",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -14,7 +14,7 @@
   "keywords": [],
   "author": {
     "name": "Jaks024",
-    "email": "42505518+Jaks024@users.noreply.github.com"
+    "email": "jacksonus0204@gmail.com"
   },
   "license": "MIT",
   "config": {
@@ -45,7 +45,6 @@
     }
   },
   "dependencies": {
-    "color": "^3.1.3",
     "electron-squirrel-startup": "^1.0.0"
   },
   "devDependencies": {
